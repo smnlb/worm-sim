@@ -4,39 +4,39 @@
 /* Pls do not remove this header - zrispo
  */
 
-var BRAIN = {};
+var BRAIN2 = {};
 
 // Import the weights from the weights.js file so it works in the browser
-BRAIN.weights = weights;
+BRAIN2.weights = weights;
 
 // A method that accepts the preSynaptic neuron and updates the postSynaptic neurons with the weighted values
-BRAIN.dendriteAccumulate = function (preSynaptic) {
+BRAIN2.dendriteAccumulate = function (preSynaptic2) {
 	// Loop through the postSynaptic neurons
-	for (var postSynaptic in BRAIN.weights[preSynaptic]) {
+	for (var postSynaptic2 in BRAIN2.weights[preSynaptic2]) {
 		// Update the postSynaptic neurons with the weighted values
-		BRAIN.postSynaptic[postSynaptic][BRAIN.nextState] +=
-			BRAIN.weights[preSynaptic][postSynaptic];
+		BRAIN2.postSynaptic2[postSynaptic2][BRAIN2.nextState2] +=
+			BRAIN2.weights[preSynaptic2][postSynaptic2];
 	}
 };
 
 /* Note: The way these work is sort of confusing
  * After every update, the value in nextState is copied into thisState,
  * and thisState and nextState are swapped (so after the first update, thisState = 1, and nextState = 0) */
-BRAIN.thisState = 0;
-BRAIN.nextState = 1;
+BRAIN2.thisState2 = 0;
+BRAIN2.nextState2 = 1;
 
 /* Maximum accumulated value that must be exceeded before the Neurite will fire */
-BRAIN.fireThreshold = 30;
+BRAIN2.fireThreshold2 = 30;
 
 /* Accumulators are used to decide the value to send to the Left and Right motors of the GoPiGo robot */
 /* Since this is the javascript version, you can use these to control whatever you want! */
-BRAIN.accumleft = 0;
-BRAIN.accumright = 0;
+BRAIN2.accumleft2 = 0;
+BRAIN2.accumright2 = 0;
 
 /* Used to remove from Axon firing since muscles cannot fire. */
-BRAIN.muscles = ['MVU', 'MVL', 'MDL', 'MVR', 'MDR'];
+BRAIN2.muscles2 = ['MVU', 'MVL', 'MDL', 'MVR', 'MDR'];
 
-BRAIN.muscleList = [
+BRAIN2.muscleList2 = [
 	'MDL07',
 	'MDL08',
 	'MDL09',
@@ -107,7 +107,7 @@ BRAIN.muscleList = [
 	'MVR23',
 ];
 
-BRAIN.mLeft = [
+BRAIN2.mLeft2 = [
 	'MDL07',
 	'MDL08',
 	'MDL09',
@@ -143,7 +143,7 @@ BRAIN.mLeft = [
 	'MVL22',
 	'MVL23',
 ];
-BRAIN.mRight = [
+BRAIN2.mRight2 = [
 	'MDR07',
 	'MDR08',
 	'MDR09',
@@ -180,7 +180,7 @@ BRAIN.mRight = [
 	'MVR23',
 ];
 /* Used to accumulate muscle weighted values in body muscles 07-23 = worm locomotion */
-BRAIN.musDleft = [
+BRAIN2.musDleft2 = [
 	'MDL07',
 	'MDL08',
 	'MDL09',
@@ -199,7 +199,7 @@ BRAIN.musDleft = [
 	'MDL22',
 	'MDL23',
 ];
-BRAIN.musVleft = [
+BRAIN2.musVleft2 = [
 	'MVL07',
 	'MVL08',
 	'MVL09',
@@ -218,7 +218,7 @@ BRAIN.musVleft = [
 	'MVL22',
 	'MVL23',
 ];
-BRAIN.musDright = [
+BRAIN2.musDright2 = [
 	'MDR07',
 	'MDR08',
 	'MDR09',
@@ -237,7 +237,7 @@ BRAIN.musDright = [
 	'MDR22',
 	'MDR23',
 ];
-BRAIN.musVright = [
+BRAIN2.musVright2 = [
 	'MVR07',
 	'MVR08',
 	'MVR09',
@@ -258,467 +258,467 @@ BRAIN.musVright = [
 ];
 
 /* Use these to stimulate nose and food sensing neurons */
-BRAIN.stimulateHungerNeurons = true;
-BRAIN.stimulateNoseTouchNeurons = false;
-BRAIN.stimulateFoodSenseNeurons = false;
+BRAIN2.stimulateHungerNeurons2 = true;
+BRAIN2.stimulateNoseTouchNeurons2 = false;
+BRAIN2.stimulateFoodSenseNeurons2 = false;
 
 // we want each simualtion to be slightly different
-BRAIN.randExcite = function () {
-	for (var i = 0; i < 40; i++) {
-		BRAIN.dendriteAccumulate(
-			Object.keys(BRAIN.connectome)[
-				Math.floor(Math.random() * Object.keys(BRAIN.connectome).length)
+BRAIN2.randExcite = function () {
+	for (var i2 = 0; i2 < 40; i2++) {
+		BRAIN2.dendriteAccumulate(
+			Object.keys(BRAIN2.connectome2)[
+				Math.floor(Math.random() * Object.keys(BRAIN2.connectome2).length)
 			],
 		);
 	}
 };
 
-BRAIN.setup = function () {
+BRAIN2.setup = function () {
 	/* The postSynaptic dictionary contains the accumulated weighted values as the
 	 * connectome is executed */
-	BRAIN.postSynaptic = {};
+	BRAIN2.postSynaptic2 = {};
 
 	/* This is the full C Elegans Connectome as expresed in the form of the connectome
 	 *  neurite and the postSynaptic neurites. */
-	BRAIN.connectome = {};
+	BRAIN2.connectome2 = {};
 
 	// For each neuron in weights.json, add a function to the connectome that invokes dendriteAccumulate
-	for (var preSynaptic in BRAIN.weights) {
-		BRAIN.connectome[preSynaptic] = function () {
-			BRAIN.dendriteAccumulate(preSynaptic);
+	for (var preSynaptic2 in BRAIN2.weights) {
+		BRAIN2.connectome2[preSynaptic2] = function () {
+			BRAIN2.dendriteAccumulate(preSynaptic2);
 		};
 	}
 
-	BRAIN.postSynaptic['ADAL'] = [0, 0];
-	BRAIN.postSynaptic['ADAR'] = [0, 0];
-	BRAIN.postSynaptic['ADEL'] = [0, 0];
-	BRAIN.postSynaptic['ADER'] = [0, 0];
-	BRAIN.postSynaptic['ADFL'] = [0, 0];
-	BRAIN.postSynaptic['ADFR'] = [0, 0];
-	BRAIN.postSynaptic['ADLL'] = [0, 0];
-	BRAIN.postSynaptic['ADLR'] = [0, 0];
-	BRAIN.postSynaptic['AFDL'] = [0, 0];
-	BRAIN.postSynaptic['AFDR'] = [0, 0];
-	BRAIN.postSynaptic['AIAL'] = [0, 0];
-	BRAIN.postSynaptic['AIAR'] = [0, 0];
-	BRAIN.postSynaptic['AIBL'] = [0, 0];
-	BRAIN.postSynaptic['AIBR'] = [0, 0];
-	BRAIN.postSynaptic['AIML'] = [0, 0];
-	BRAIN.postSynaptic['AIMR'] = [0, 0];
-	BRAIN.postSynaptic['AINL'] = [0, 0];
-	BRAIN.postSynaptic['AINR'] = [0, 0];
-	BRAIN.postSynaptic['AIYL'] = [0, 0];
-	BRAIN.postSynaptic['AIYR'] = [0, 0];
-	BRAIN.postSynaptic['AIZL'] = [0, 0];
-	BRAIN.postSynaptic['AIZR'] = [0, 0];
-	BRAIN.postSynaptic['ALA'] = [0, 0];
-	BRAIN.postSynaptic['ALML'] = [0, 0];
-	BRAIN.postSynaptic['ALMR'] = [0, 0];
-	BRAIN.postSynaptic['ALNL'] = [0, 0];
-	BRAIN.postSynaptic['ALNR'] = [0, 0];
-	BRAIN.postSynaptic['AQR'] = [0, 0];
-	BRAIN.postSynaptic['AS1'] = [0, 0];
-	BRAIN.postSynaptic['AS10'] = [0, 0];
-	BRAIN.postSynaptic['AS11'] = [0, 0];
-	BRAIN.postSynaptic['AS2'] = [0, 0];
-	BRAIN.postSynaptic['AS3'] = [0, 0];
-	BRAIN.postSynaptic['AS4'] = [0, 0];
-	BRAIN.postSynaptic['AS5'] = [0, 0];
-	BRAIN.postSynaptic['AS6'] = [0, 0];
-	BRAIN.postSynaptic['AS7'] = [0, 0];
-	BRAIN.postSynaptic['AS8'] = [0, 0];
-	BRAIN.postSynaptic['AS9'] = [0, 0];
-	BRAIN.postSynaptic['ASEL'] = [0, 0];
-	BRAIN.postSynaptic['ASER'] = [0, 0];
-	BRAIN.postSynaptic['ASGL'] = [0, 0];
-	BRAIN.postSynaptic['ASGR'] = [0, 0];
-	BRAIN.postSynaptic['ASHL'] = [0, 0];
-	BRAIN.postSynaptic['ASHR'] = [0, 0];
-	BRAIN.postSynaptic['ASIL'] = [0, 0];
-	BRAIN.postSynaptic['ASIR'] = [0, 0];
-	BRAIN.postSynaptic['ASJL'] = [0, 0];
-	BRAIN.postSynaptic['ASJR'] = [0, 0];
-	BRAIN.postSynaptic['ASKL'] = [0, 0];
-	BRAIN.postSynaptic['ASKR'] = [0, 0];
-	BRAIN.postSynaptic['AUAL'] = [0, 0];
-	BRAIN.postSynaptic['AUAR'] = [0, 0];
-	BRAIN.postSynaptic['AVAL'] = [0, 0];
-	BRAIN.postSynaptic['AVAR'] = [0, 0];
-	BRAIN.postSynaptic['AVBL'] = [0, 0];
-	BRAIN.postSynaptic['AVBR'] = [0, 0];
-	BRAIN.postSynaptic['AVDL'] = [0, 0];
-	BRAIN.postSynaptic['AVDR'] = [0, 0];
-	BRAIN.postSynaptic['AVEL'] = [0, 0];
-	BRAIN.postSynaptic['AVER'] = [0, 0];
-	BRAIN.postSynaptic['AVFL'] = [0, 0];
-	BRAIN.postSynaptic['AVFR'] = [0, 0];
-	BRAIN.postSynaptic['AVG'] = [0, 0];
-	BRAIN.postSynaptic['AVHL'] = [0, 0];
-	BRAIN.postSynaptic['AVHR'] = [0, 0];
-	BRAIN.postSynaptic['AVJL'] = [0, 0];
-	BRAIN.postSynaptic['AVJR'] = [0, 0];
-	BRAIN.postSynaptic['AVKL'] = [0, 0];
-	BRAIN.postSynaptic['AVKR'] = [0, 0];
-	BRAIN.postSynaptic['AVL'] = [0, 0];
-	BRAIN.postSynaptic['AVM'] = [0, 0];
-	BRAIN.postSynaptic['AWAL'] = [0, 0];
-	BRAIN.postSynaptic['AWAR'] = [0, 0];
-	BRAIN.postSynaptic['AWBL'] = [0, 0];
-	BRAIN.postSynaptic['AWBR'] = [0, 0];
-	BRAIN.postSynaptic['AWCL'] = [0, 0];
-	BRAIN.postSynaptic['AWCR'] = [0, 0];
-	BRAIN.postSynaptic['BAGL'] = [0, 0];
-	BRAIN.postSynaptic['BAGR'] = [0, 0];
-	BRAIN.postSynaptic['BDUL'] = [0, 0];
-	BRAIN.postSynaptic['BDUR'] = [0, 0];
-	BRAIN.postSynaptic['CEPDL'] = [0, 0];
-	BRAIN.postSynaptic['CEPDR'] = [0, 0];
-	BRAIN.postSynaptic['CEPVL'] = [0, 0];
-	BRAIN.postSynaptic['CEPVR'] = [0, 0];
-	BRAIN.postSynaptic['DA1'] = [0, 0];
-	BRAIN.postSynaptic['DA2'] = [0, 0];
-	BRAIN.postSynaptic['DA3'] = [0, 0];
-	BRAIN.postSynaptic['DA4'] = [0, 0];
-	BRAIN.postSynaptic['DA5'] = [0, 0];
-	BRAIN.postSynaptic['DA6'] = [0, 0];
-	BRAIN.postSynaptic['DA7'] = [0, 0];
-	BRAIN.postSynaptic['DA8'] = [0, 0];
-	BRAIN.postSynaptic['DA9'] = [0, 0];
-	BRAIN.postSynaptic['DB1'] = [0, 0];
-	BRAIN.postSynaptic['DB2'] = [0, 0];
-	BRAIN.postSynaptic['DB3'] = [0, 0];
-	BRAIN.postSynaptic['DB4'] = [0, 0];
-	BRAIN.postSynaptic['DB5'] = [0, 0];
-	BRAIN.postSynaptic['DB6'] = [0, 0];
-	BRAIN.postSynaptic['DB7'] = [0, 0];
-	BRAIN.postSynaptic['DD1'] = [0, 0];
-	BRAIN.postSynaptic['DD2'] = [0, 0];
-	BRAIN.postSynaptic['DD3'] = [0, 0];
-	BRAIN.postSynaptic['DD4'] = [0, 0];
-	BRAIN.postSynaptic['DD5'] = [0, 0];
-	BRAIN.postSynaptic['DD6'] = [0, 0];
-	BRAIN.postSynaptic['DVA'] = [0, 0];
-	BRAIN.postSynaptic['DVB'] = [0, 0];
-	BRAIN.postSynaptic['DVC'] = [0, 0];
-	BRAIN.postSynaptic['FLPL'] = [0, 0];
-	BRAIN.postSynaptic['FLPR'] = [0, 0];
-	BRAIN.postSynaptic['HSNL'] = [0, 0];
-	BRAIN.postSynaptic['HSNR'] = [0, 0];
-	BRAIN.postSynaptic['I1L'] = [0, 0];
-	BRAIN.postSynaptic['I1R'] = [0, 0];
-	BRAIN.postSynaptic['I2L'] = [0, 0];
-	BRAIN.postSynaptic['I2R'] = [0, 0];
-	BRAIN.postSynaptic['I3'] = [0, 0];
-	BRAIN.postSynaptic['I4'] = [0, 0];
-	BRAIN.postSynaptic['I5'] = [0, 0];
-	BRAIN.postSynaptic['I6'] = [0, 0];
-	BRAIN.postSynaptic['IL1DL'] = [0, 0];
-	BRAIN.postSynaptic['IL1DR'] = [0, 0];
-	BRAIN.postSynaptic['IL1L'] = [0, 0];
-	BRAIN.postSynaptic['IL1R'] = [0, 0];
-	BRAIN.postSynaptic['IL1VL'] = [0, 0];
-	BRAIN.postSynaptic['IL1VR'] = [0, 0];
-	BRAIN.postSynaptic['IL2L'] = [0, 0];
-	BRAIN.postSynaptic['IL2R'] = [0, 0];
-	BRAIN.postSynaptic['IL2DL'] = [0, 0];
-	BRAIN.postSynaptic['IL2DR'] = [0, 0];
-	BRAIN.postSynaptic['IL2VL'] = [0, 0];
-	BRAIN.postSynaptic['IL2VR'] = [0, 0];
-	BRAIN.postSynaptic['LUAL'] = [0, 0];
-	BRAIN.postSynaptic['LUAR'] = [0, 0];
-	BRAIN.postSynaptic['M1'] = [0, 0];
-	BRAIN.postSynaptic['M2L'] = [0, 0];
-	BRAIN.postSynaptic['M2R'] = [0, 0];
-	BRAIN.postSynaptic['M3L'] = [0, 0];
-	BRAIN.postSynaptic['M3R'] = [0, 0];
-	BRAIN.postSynaptic['M4'] = [0, 0];
-	BRAIN.postSynaptic['M5'] = [0, 0];
-	BRAIN.postSynaptic['MANAL'] = [0, 0];
-	BRAIN.postSynaptic['MCL'] = [0, 0];
-	BRAIN.postSynaptic['MCR'] = [0, 0];
-	BRAIN.postSynaptic['MDL01'] = [0, 0];
-	BRAIN.postSynaptic['MDL02'] = [0, 0];
-	BRAIN.postSynaptic['MDL03'] = [0, 0];
-	BRAIN.postSynaptic['MDL04'] = [0, 0];
-	BRAIN.postSynaptic['MDL05'] = [0, 0];
-	BRAIN.postSynaptic['MDL06'] = [0, 0];
-	BRAIN.postSynaptic['MDL07'] = [0, 0];
-	BRAIN.postSynaptic['MDL08'] = [0, 0];
-	BRAIN.postSynaptic['MDL09'] = [0, 0];
-	BRAIN.postSynaptic['MDL10'] = [0, 0];
-	BRAIN.postSynaptic['MDL11'] = [0, 0];
-	BRAIN.postSynaptic['MDL12'] = [0, 0];
-	BRAIN.postSynaptic['MDL13'] = [0, 0];
-	BRAIN.postSynaptic['MDL14'] = [0, 0];
-	BRAIN.postSynaptic['MDL15'] = [0, 0];
-	BRAIN.postSynaptic['MDL16'] = [0, 0];
-	BRAIN.postSynaptic['MDL17'] = [0, 0];
-	BRAIN.postSynaptic['MDL18'] = [0, 0];
-	BRAIN.postSynaptic['MDL19'] = [0, 0];
-	BRAIN.postSynaptic['MDL20'] = [0, 0];
-	BRAIN.postSynaptic['MDL21'] = [0, 0];
-	BRAIN.postSynaptic['MDL22'] = [0, 0];
-	BRAIN.postSynaptic['MDL23'] = [0, 0];
-	BRAIN.postSynaptic['MDL24'] = [0, 0];
-	BRAIN.postSynaptic['MDR01'] = [0, 0];
-	BRAIN.postSynaptic['MDR02'] = [0, 0];
-	BRAIN.postSynaptic['MDR03'] = [0, 0];
-	BRAIN.postSynaptic['MDR04'] = [0, 0];
-	BRAIN.postSynaptic['MDR05'] = [0, 0];
-	BRAIN.postSynaptic['MDR06'] = [0, 0];
-	BRAIN.postSynaptic['MDR07'] = [0, 0];
-	BRAIN.postSynaptic['MDR08'] = [0, 0];
-	BRAIN.postSynaptic['MDR09'] = [0, 0];
-	BRAIN.postSynaptic['MDR10'] = [0, 0];
-	BRAIN.postSynaptic['MDR11'] = [0, 0];
-	BRAIN.postSynaptic['MDR12'] = [0, 0];
-	BRAIN.postSynaptic['MDR13'] = [0, 0];
-	BRAIN.postSynaptic['MDR14'] = [0, 0];
-	BRAIN.postSynaptic['MDR15'] = [0, 0];
-	BRAIN.postSynaptic['MDR16'] = [0, 0];
-	BRAIN.postSynaptic['MDR17'] = [0, 0];
-	BRAIN.postSynaptic['MDR18'] = [0, 0];
-	BRAIN.postSynaptic['MDR19'] = [0, 0];
-	BRAIN.postSynaptic['MDR20'] = [0, 0];
-	BRAIN.postSynaptic['MDR21'] = [0, 0];
-	BRAIN.postSynaptic['MDR22'] = [0, 0];
-	BRAIN.postSynaptic['MDR23'] = [0, 0];
-	BRAIN.postSynaptic['MDR24'] = [0, 0];
-	BRAIN.postSynaptic['MI'] = [0, 0];
-	BRAIN.postSynaptic['MVL01'] = [0, 0];
-	BRAIN.postSynaptic['MVL02'] = [0, 0];
-	BRAIN.postSynaptic['MVL03'] = [0, 0];
-	BRAIN.postSynaptic['MVL04'] = [0, 0];
-	BRAIN.postSynaptic['MVL05'] = [0, 0];
-	BRAIN.postSynaptic['MVL06'] = [0, 0];
-	BRAIN.postSynaptic['MVL07'] = [0, 0];
-	BRAIN.postSynaptic['MVL08'] = [0, 0];
-	BRAIN.postSynaptic['MVL09'] = [0, 0];
-	BRAIN.postSynaptic['MVL10'] = [0, 0];
-	BRAIN.postSynaptic['MVL11'] = [0, 0];
-	BRAIN.postSynaptic['MVL12'] = [0, 0];
-	BRAIN.postSynaptic['MVL13'] = [0, 0];
-	BRAIN.postSynaptic['MVL14'] = [0, 0];
-	BRAIN.postSynaptic['MVL15'] = [0, 0];
-	BRAIN.postSynaptic['MVL16'] = [0, 0];
-	BRAIN.postSynaptic['MVL17'] = [0, 0];
-	BRAIN.postSynaptic['MVL18'] = [0, 0];
-	BRAIN.postSynaptic['MVL19'] = [0, 0];
-	BRAIN.postSynaptic['MVL20'] = [0, 0];
-	BRAIN.postSynaptic['MVL21'] = [0, 0];
-	BRAIN.postSynaptic['MVL22'] = [0, 0];
-	BRAIN.postSynaptic['MVL23'] = [0, 0];
-	BRAIN.postSynaptic['MVR01'] = [0, 0];
-	BRAIN.postSynaptic['MVR02'] = [0, 0];
-	BRAIN.postSynaptic['MVR03'] = [0, 0];
-	BRAIN.postSynaptic['MVR04'] = [0, 0];
-	BRAIN.postSynaptic['MVR05'] = [0, 0];
-	BRAIN.postSynaptic['MVR06'] = [0, 0];
-	BRAIN.postSynaptic['MVR07'] = [0, 0];
-	BRAIN.postSynaptic['MVR08'] = [0, 0];
-	BRAIN.postSynaptic['MVR09'] = [0, 0];
-	BRAIN.postSynaptic['MVR10'] = [0, 0];
-	BRAIN.postSynaptic['MVR11'] = [0, 0];
-	BRAIN.postSynaptic['MVR12'] = [0, 0];
-	BRAIN.postSynaptic['MVR13'] = [0, 0];
-	BRAIN.postSynaptic['MVR14'] = [0, 0];
-	BRAIN.postSynaptic['MVR15'] = [0, 0];
-	BRAIN.postSynaptic['MVR16'] = [0, 0];
-	BRAIN.postSynaptic['MVR17'] = [0, 0];
-	BRAIN.postSynaptic['MVR18'] = [0, 0];
-	BRAIN.postSynaptic['MVR19'] = [0, 0];
-	BRAIN.postSynaptic['MVR20'] = [0, 0];
-	BRAIN.postSynaptic['MVR21'] = [0, 0];
-	BRAIN.postSynaptic['MVR22'] = [0, 0];
-	BRAIN.postSynaptic['MVR23'] = [0, 0];
-	BRAIN.postSynaptic['MVR24'] = [0, 0];
-	BRAIN.postSynaptic['MVULVA'] = [0, 0];
-	BRAIN.postSynaptic['NSML'] = [0, 0];
-	BRAIN.postSynaptic['NSMR'] = [0, 0];
-	BRAIN.postSynaptic['OLLL'] = [0, 0];
-	BRAIN.postSynaptic['OLLR'] = [0, 0];
-	BRAIN.postSynaptic['OLQDL'] = [0, 0];
-	BRAIN.postSynaptic['OLQDR'] = [0, 0];
-	BRAIN.postSynaptic['OLQVL'] = [0, 0];
-	BRAIN.postSynaptic['OLQVR'] = [0, 0];
-	BRAIN.postSynaptic['PDA'] = [0, 0];
-	BRAIN.postSynaptic['PDB'] = [0, 0];
-	BRAIN.postSynaptic['PDEL'] = [0, 0];
-	BRAIN.postSynaptic['PDER'] = [0, 0];
-	BRAIN.postSynaptic['PHAL'] = [0, 0];
-	BRAIN.postSynaptic['PHAR'] = [0, 0];
-	BRAIN.postSynaptic['PHBL'] = [0, 0];
-	BRAIN.postSynaptic['PHBR'] = [0, 0];
-	BRAIN.postSynaptic['PHCL'] = [0, 0];
-	BRAIN.postSynaptic['PHCR'] = [0, 0];
-	BRAIN.postSynaptic['PLML'] = [0, 0];
-	BRAIN.postSynaptic['PLMR'] = [0, 0];
-	BRAIN.postSynaptic['PLNL'] = [0, 0];
-	BRAIN.postSynaptic['PLNR'] = [0, 0];
-	BRAIN.postSynaptic['PQR'] = [0, 0];
-	BRAIN.postSynaptic['PVCL'] = [0, 0];
-	BRAIN.postSynaptic['PVCR'] = [0, 0];
-	BRAIN.postSynaptic['PVDL'] = [0, 0];
-	BRAIN.postSynaptic['PVDR'] = [0, 0];
-	BRAIN.postSynaptic['PVM'] = [0, 0];
-	BRAIN.postSynaptic['PVNL'] = [0, 0];
-	BRAIN.postSynaptic['PVNR'] = [0, 0];
-	BRAIN.postSynaptic['PVPL'] = [0, 0];
-	BRAIN.postSynaptic['PVPR'] = [0, 0];
-	BRAIN.postSynaptic['PVQL'] = [0, 0];
-	BRAIN.postSynaptic['PVQR'] = [0, 0];
-	BRAIN.postSynaptic['PVR'] = [0, 0];
-	BRAIN.postSynaptic['PVT'] = [0, 0];
-	BRAIN.postSynaptic['PVWL'] = [0, 0];
-	BRAIN.postSynaptic['PVWR'] = [0, 0];
-	BRAIN.postSynaptic['RIAL'] = [0, 0];
-	BRAIN.postSynaptic['RIAR'] = [0, 0];
-	BRAIN.postSynaptic['RIBL'] = [0, 0];
-	BRAIN.postSynaptic['RIBR'] = [0, 0];
-	BRAIN.postSynaptic['RICL'] = [0, 0];
-	BRAIN.postSynaptic['RICR'] = [0, 0];
-	BRAIN.postSynaptic['RID'] = [0, 0];
-	BRAIN.postSynaptic['RIFL'] = [0, 0];
-	BRAIN.postSynaptic['RIFR'] = [0, 0];
-	BRAIN.postSynaptic['RIGL'] = [0, 0];
-	BRAIN.postSynaptic['RIGR'] = [0, 0];
-	BRAIN.postSynaptic['RIH'] = [0, 0];
-	BRAIN.postSynaptic['RIML'] = [0, 0];
-	BRAIN.postSynaptic['RIMR'] = [0, 0];
-	BRAIN.postSynaptic['RIPL'] = [0, 0];
-	BRAIN.postSynaptic['RIPR'] = [0, 0];
-	BRAIN.postSynaptic['RIR'] = [0, 0];
-	BRAIN.postSynaptic['RIS'] = [0, 0];
-	BRAIN.postSynaptic['RIVL'] = [0, 0];
-	BRAIN.postSynaptic['RIVR'] = [0, 0];
-	BRAIN.postSynaptic['RMDDL'] = [0, 0];
-	BRAIN.postSynaptic['RMDDR'] = [0, 0];
-	BRAIN.postSynaptic['RMDL'] = [0, 0];
-	BRAIN.postSynaptic['RMDR'] = [0, 0];
-	BRAIN.postSynaptic['RMDVL'] = [0, 0];
-	BRAIN.postSynaptic['RMDVR'] = [0, 0];
-	BRAIN.postSynaptic['RMED'] = [0, 0];
-	BRAIN.postSynaptic['RMEL'] = [0, 0];
-	BRAIN.postSynaptic['RMER'] = [0, 0];
-	BRAIN.postSynaptic['RMEV'] = [0, 0];
-	BRAIN.postSynaptic['RMFL'] = [0, 0];
-	BRAIN.postSynaptic['RMFR'] = [0, 0];
-	BRAIN.postSynaptic['RMGL'] = [0, 0];
-	BRAIN.postSynaptic['RMGR'] = [0, 0];
-	BRAIN.postSynaptic['RMHL'] = [0, 0];
-	BRAIN.postSynaptic['RMHR'] = [0, 0];
-	BRAIN.postSynaptic['SAADL'] = [0, 0];
-	BRAIN.postSynaptic['SAADR'] = [0, 0];
-	BRAIN.postSynaptic['SAAVL'] = [0, 0];
-	BRAIN.postSynaptic['SAAVR'] = [0, 0];
-	BRAIN.postSynaptic['SABD'] = [0, 0];
-	BRAIN.postSynaptic['SABVL'] = [0, 0];
-	BRAIN.postSynaptic['SABVR'] = [0, 0];
-	BRAIN.postSynaptic['SDQL'] = [0, 0];
-	BRAIN.postSynaptic['SDQR'] = [0, 0];
-	BRAIN.postSynaptic['SIADL'] = [0, 0];
-	BRAIN.postSynaptic['SIADR'] = [0, 0];
-	BRAIN.postSynaptic['SIAVL'] = [0, 0];
-	BRAIN.postSynaptic['SIAVR'] = [0, 0];
-	BRAIN.postSynaptic['SIBDL'] = [0, 0];
-	BRAIN.postSynaptic['SIBDR'] = [0, 0];
-	BRAIN.postSynaptic['SIBVL'] = [0, 0];
-	BRAIN.postSynaptic['SIBVR'] = [0, 0];
-	BRAIN.postSynaptic['SMBDL'] = [0, 0];
-	BRAIN.postSynaptic['SMBDR'] = [0, 0];
-	BRAIN.postSynaptic['SMBVL'] = [0, 0];
-	BRAIN.postSynaptic['SMBVR'] = [0, 0];
-	BRAIN.postSynaptic['SMDDL'] = [0, 0];
-	BRAIN.postSynaptic['SMDDR'] = [0, 0];
-	BRAIN.postSynaptic['SMDVL'] = [0, 0];
-	BRAIN.postSynaptic['SMDVR'] = [0, 0];
-	BRAIN.postSynaptic['URADL'] = [0, 0];
-	BRAIN.postSynaptic['URADR'] = [0, 0];
-	BRAIN.postSynaptic['URAVL'] = [0, 0];
-	BRAIN.postSynaptic['URAVR'] = [0, 0];
-	BRAIN.postSynaptic['URBL'] = [0, 0];
-	BRAIN.postSynaptic['URBR'] = [0, 0];
-	BRAIN.postSynaptic['URXL'] = [0, 0];
-	BRAIN.postSynaptic['URXR'] = [0, 0];
-	BRAIN.postSynaptic['URYDL'] = [0, 0];
-	BRAIN.postSynaptic['URYDR'] = [0, 0];
-	BRAIN.postSynaptic['URYVL'] = [0, 0];
-	BRAIN.postSynaptic['URYVR'] = [0, 0];
-	BRAIN.postSynaptic['VA1'] = [0, 0];
-	BRAIN.postSynaptic['VA10'] = [0, 0];
-	BRAIN.postSynaptic['VA11'] = [0, 0];
-	BRAIN.postSynaptic['VA12'] = [0, 0];
-	BRAIN.postSynaptic['VA2'] = [0, 0];
-	BRAIN.postSynaptic['VA3'] = [0, 0];
-	BRAIN.postSynaptic['VA4'] = [0, 0];
-	BRAIN.postSynaptic['VA5'] = [0, 0];
-	BRAIN.postSynaptic['VA6'] = [0, 0];
-	BRAIN.postSynaptic['VA7'] = [0, 0];
-	BRAIN.postSynaptic['VA8'] = [0, 0];
-	BRAIN.postSynaptic['VA9'] = [0, 0];
-	BRAIN.postSynaptic['VB1'] = [0, 0];
-	BRAIN.postSynaptic['VB10'] = [0, 0];
-	BRAIN.postSynaptic['VB11'] = [0, 0];
-	BRAIN.postSynaptic['VB2'] = [0, 0];
-	BRAIN.postSynaptic['VB3'] = [0, 0];
-	BRAIN.postSynaptic['VB4'] = [0, 0];
-	BRAIN.postSynaptic['VB5'] = [0, 0];
-	BRAIN.postSynaptic['VB6'] = [0, 0];
-	BRAIN.postSynaptic['VB7'] = [0, 0];
-	BRAIN.postSynaptic['VB8'] = [0, 0];
-	BRAIN.postSynaptic['VB9'] = [0, 0];
-	BRAIN.postSynaptic['VC1'] = [0, 0];
-	BRAIN.postSynaptic['VC2'] = [0, 0];
-	BRAIN.postSynaptic['VC3'] = [0, 0];
-	BRAIN.postSynaptic['VC4'] = [0, 0];
-	BRAIN.postSynaptic['VC5'] = [0, 0];
-	BRAIN.postSynaptic['VC6'] = [0, 0];
-	BRAIN.postSynaptic['VD1'] = [0, 0];
-	BRAIN.postSynaptic['VD10'] = [0, 0];
-	BRAIN.postSynaptic['VD11'] = [0, 0];
-	BRAIN.postSynaptic['VD12'] = [0, 0];
-	BRAIN.postSynaptic['VD13'] = [0, 0];
-	BRAIN.postSynaptic['VD2'] = [0, 0];
-	BRAIN.postSynaptic['VD3'] = [0, 0];
-	BRAIN.postSynaptic['VD4'] = [0, 0];
-	BRAIN.postSynaptic['VD5'] = [0, 0];
-	BRAIN.postSynaptic['VD6'] = [0, 0];
-	BRAIN.postSynaptic['VD7'] = [0, 0];
-	BRAIN.postSynaptic['VD8'] = [0, 0];
-	BRAIN.postSynaptic['VD9'] = [0, 0];
+	BRAIN2.postSynaptic2['ADAL'] = [0, 0];
+	BRAIN2.postSynaptic2['ADAR'] = [0, 0];
+	BRAIN2.postSynaptic2['ADEL'] = [0, 0];
+	BRAIN2.postSynaptic2['ADER'] = [0, 0];
+	BRAIN2.postSynaptic2['ADFL'] = [0, 0];
+	BRAIN2.postSynaptic2['ADFR'] = [0, 0];
+	BRAIN2.postSynaptic2['ADLL'] = [0, 0];
+	BRAIN2.postSynaptic2['ADLR'] = [0, 0];
+	BRAIN2.postSynaptic2['AFDL'] = [0, 0];
+	BRAIN2.postSynaptic2['AFDR'] = [0, 0];
+	BRAIN2.postSynaptic2['AIAL'] = [0, 0];
+	BRAIN2.postSynaptic2['AIAR'] = [0, 0];
+	BRAIN2.postSynaptic2['AIBL'] = [0, 0];
+	BRAIN2.postSynaptic2['AIBR'] = [0, 0];
+	BRAIN2.postSynaptic2['AIML'] = [0, 0];
+	BRAIN2.postSynaptic2['AIMR'] = [0, 0];
+	BRAIN2.postSynaptic2['AINL'] = [0, 0];
+	BRAIN2.postSynaptic2['AINR'] = [0, 0];
+	BRAIN2.postSynaptic2['AIYL'] = [0, 0];
+	BRAIN2.postSynaptic2['AIYR'] = [0, 0];
+	BRAIN2.postSynaptic2['AIZL'] = [0, 0];
+	BRAIN2.postSynaptic2['AIZR'] = [0, 0];
+	BRAIN2.postSynaptic2['ALA'] = [0, 0];
+	BRAIN2.postSynaptic2['ALML'] = [0, 0];
+	BRAIN2.postSynaptic2['ALMR'] = [0, 0];
+	BRAIN2.postSynaptic2['ALNL'] = [0, 0];
+	BRAIN2.postSynaptic2['ALNR'] = [0, 0];
+	BRAIN2.postSynaptic2['AQR'] = [0, 0];
+	BRAIN2.postSynaptic2['AS1'] = [0, 0];
+	BRAIN2.postSynaptic2['AS10'] = [0, 0];
+	BRAIN2.postSynaptic2['AS11'] = [0, 0];
+	BRAIN2.postSynaptic2['AS2'] = [0, 0];
+	BRAIN2.postSynaptic2['AS3'] = [0, 0];
+	BRAIN2.postSynaptic2['AS4'] = [0, 0];
+	BRAIN2.postSynaptic2['AS5'] = [0, 0];
+	BRAIN2.postSynaptic2['AS6'] = [0, 0];
+	BRAIN2.postSynaptic2['AS7'] = [0, 0];
+	BRAIN2.postSynaptic2['AS8'] = [0, 0];
+	BRAIN2.postSynaptic2['AS9'] = [0, 0];
+	BRAIN2.postSynaptic2['ASEL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASER'] = [0, 0];
+	BRAIN2.postSynaptic2['ASGL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASGR'] = [0, 0];
+	BRAIN2.postSynaptic2['ASHL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASHR'] = [0, 0];
+	BRAIN2.postSynaptic2['ASIL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASIR'] = [0, 0];
+	BRAIN2.postSynaptic2['ASJL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASJR'] = [0, 0];
+	BRAIN2.postSynaptic2['ASKL'] = [0, 0];
+	BRAIN2.postSynaptic2['ASKR'] = [0, 0];
+	BRAIN2.postSynaptic2['AUAL'] = [0, 0];
+	BRAIN2.postSynaptic2['AUAR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVAL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVAR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVBL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVBR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVDL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVDR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVEL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVER'] = [0, 0];
+	BRAIN2.postSynaptic2['AVFL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVFR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVG'] = [0, 0];
+	BRAIN2.postSynaptic2['AVHL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVHR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVJL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVJR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVKL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVKR'] = [0, 0];
+	BRAIN2.postSynaptic2['AVL'] = [0, 0];
+	BRAIN2.postSynaptic2['AVM'] = [0, 0];
+	BRAIN2.postSynaptic2['AWAL'] = [0, 0];
+	BRAIN2.postSynaptic2['AWAR'] = [0, 0];
+	BRAIN2.postSynaptic2['AWBL'] = [0, 0];
+	BRAIN2.postSynaptic2['AWBR'] = [0, 0];
+	BRAIN2.postSynaptic2['AWCL'] = [0, 0];
+	BRAIN2.postSynaptic2['AWCR'] = [0, 0];
+	BRAIN2.postSynaptic2['BAGL'] = [0, 0];
+	BRAIN2.postSynaptic2['BAGR'] = [0, 0];
+	BRAIN2.postSynaptic2['BDUL'] = [0, 0];
+	BRAIN2.postSynaptic2['BDUR'] = [0, 0];
+	BRAIN2.postSynaptic2['CEPDL'] = [0, 0];
+	BRAIN2.postSynaptic2['CEPDR'] = [0, 0];
+	BRAIN2.postSynaptic2['CEPVL'] = [0, 0];
+	BRAIN2.postSynaptic2['CEPVR'] = [0, 0];
+	BRAIN2.postSynaptic2['DA1'] = [0, 0];
+	BRAIN2.postSynaptic2['DA2'] = [0, 0];
+	BRAIN2.postSynaptic2['DA3'] = [0, 0];
+	BRAIN2.postSynaptic2['DA4'] = [0, 0];
+	BRAIN2.postSynaptic2['DA5'] = [0, 0];
+	BRAIN2.postSynaptic2['DA6'] = [0, 0];
+	BRAIN2.postSynaptic2['DA7'] = [0, 0];
+	BRAIN2.postSynaptic2['DA8'] = [0, 0];
+	BRAIN2.postSynaptic2['DA9'] = [0, 0];
+	BRAIN2.postSynaptic2['DB1'] = [0, 0];
+	BRAIN2.postSynaptic2['DB2'] = [0, 0];
+	BRAIN2.postSynaptic2['DB3'] = [0, 0];
+	BRAIN2.postSynaptic2['DB4'] = [0, 0];
+	BRAIN2.postSynaptic2['DB5'] = [0, 0];
+	BRAIN2.postSynaptic2['DB6'] = [0, 0];
+	BRAIN2.postSynaptic2['DB7'] = [0, 0];
+	BRAIN2.postSynaptic2['DD1'] = [0, 0];
+	BRAIN2.postSynaptic2['DD2'] = [0, 0];
+	BRAIN2.postSynaptic2['DD3'] = [0, 0];
+	BRAIN2.postSynaptic2['DD4'] = [0, 0];
+	BRAIN2.postSynaptic2['DD5'] = [0, 0];
+	BRAIN2.postSynaptic2['DD6'] = [0, 0];
+	BRAIN2.postSynaptic2['DVA'] = [0, 0];
+	BRAIN2.postSynaptic2['DVB'] = [0, 0];
+	BRAIN2.postSynaptic2['DVC'] = [0, 0];
+	BRAIN2.postSynaptic2['FLPL'] = [0, 0];
+	BRAIN2.postSynaptic2['FLPR'] = [0, 0];
+	BRAIN2.postSynaptic2['HSNL'] = [0, 0];
+	BRAIN2.postSynaptic2['HSNR'] = [0, 0];
+	BRAIN2.postSynaptic2['I1L'] = [0, 0];
+	BRAIN2.postSynaptic2['I1R'] = [0, 0];
+	BRAIN2.postSynaptic2['I2L'] = [0, 0];
+	BRAIN2.postSynaptic2['I2R'] = [0, 0];
+	BRAIN2.postSynaptic2['I3'] = [0, 0];
+	BRAIN2.postSynaptic2['I4'] = [0, 0];
+	BRAIN2.postSynaptic2['I5'] = [0, 0];
+	BRAIN2.postSynaptic2['I6'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1DL'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1DR'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1L'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1R'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1VL'] = [0, 0];
+	BRAIN2.postSynaptic2['IL1VR'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2L'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2R'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2DL'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2DR'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2VL'] = [0, 0];
+	BRAIN2.postSynaptic2['IL2VR'] = [0, 0];
+	BRAIN2.postSynaptic2['LUAL'] = [0, 0];
+	BRAIN2.postSynaptic2['LUAR'] = [0, 0];
+	BRAIN2.postSynaptic2['M1'] = [0, 0];
+	BRAIN2.postSynaptic2['M2L'] = [0, 0];
+	BRAIN2.postSynaptic2['M2R'] = [0, 0];
+	BRAIN2.postSynaptic2['M3L'] = [0, 0];
+	BRAIN2.postSynaptic2['M3R'] = [0, 0];
+	BRAIN2.postSynaptic2['M4'] = [0, 0];
+	BRAIN2.postSynaptic2['M5'] = [0, 0];
+	BRAIN2.postSynaptic2['MANAL'] = [0, 0];
+	BRAIN2.postSynaptic2['MCL'] = [0, 0];
+	BRAIN2.postSynaptic2['MCR'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL01'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL02'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL03'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL04'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL05'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL06'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL07'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL08'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL09'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL10'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL11'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL12'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL13'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL14'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL15'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL16'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL17'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL18'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL19'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL20'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL21'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL22'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL23'] = [0, 0];
+	BRAIN2.postSynaptic2['MDL24'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR01'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR02'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR03'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR04'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR05'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR06'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR07'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR08'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR09'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR10'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR11'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR12'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR13'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR14'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR15'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR16'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR17'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR18'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR19'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR20'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR21'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR22'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR23'] = [0, 0];
+	BRAIN2.postSynaptic2['MDR24'] = [0, 0];
+	BRAIN2.postSynaptic2['MI'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL01'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL02'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL03'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL04'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL05'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL06'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL07'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL08'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL09'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL10'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL11'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL12'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL13'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL14'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL15'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL16'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL17'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL18'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL19'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL20'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL21'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL22'] = [0, 0];
+	BRAIN2.postSynaptic2['MVL23'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR01'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR02'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR03'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR04'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR05'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR06'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR07'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR08'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR09'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR10'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR11'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR12'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR13'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR14'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR15'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR16'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR17'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR18'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR19'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR20'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR21'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR22'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR23'] = [0, 0];
+	BRAIN2.postSynaptic2['MVR24'] = [0, 0];
+	BRAIN2.postSynaptic2['MVULVA'] = [0, 0];
+	BRAIN2.postSynaptic2['NSML'] = [0, 0];
+	BRAIN2.postSynaptic2['NSMR'] = [0, 0];
+	BRAIN2.postSynaptic2['OLLL'] = [0, 0];
+	BRAIN2.postSynaptic2['OLLR'] = [0, 0];
+	BRAIN2.postSynaptic2['OLQDL'] = [0, 0];
+	BRAIN2.postSynaptic2['OLQDR'] = [0, 0];
+	BRAIN2.postSynaptic2['OLQVL'] = [0, 0];
+	BRAIN2.postSynaptic2['OLQVR'] = [0, 0];
+	BRAIN2.postSynaptic2['PDA'] = [0, 0];
+	BRAIN2.postSynaptic2['PDB'] = [0, 0];
+	BRAIN2.postSynaptic2['PDEL'] = [0, 0];
+	BRAIN2.postSynaptic2['PDER'] = [0, 0];
+	BRAIN2.postSynaptic2['PHAL'] = [0, 0];
+	BRAIN2.postSynaptic2['PHAR'] = [0, 0];
+	BRAIN2.postSynaptic2['PHBL'] = [0, 0];
+	BRAIN2.postSynaptic2['PHBR'] = [0, 0];
+	BRAIN2.postSynaptic2['PHCL'] = [0, 0];
+	BRAIN2.postSynaptic2['PHCR'] = [0, 0];
+	BRAIN2.postSynaptic2['PLML'] = [0, 0];
+	BRAIN2.postSynaptic2['PLMR'] = [0, 0];
+	BRAIN2.postSynaptic2['PLNL'] = [0, 0];
+	BRAIN2.postSynaptic2['PLNR'] = [0, 0];
+	BRAIN2.postSynaptic2['PQR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVCL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVCR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVDL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVDR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVM'] = [0, 0];
+	BRAIN2.postSynaptic2['PVNL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVNR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVPL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVPR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVQL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVQR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVR'] = [0, 0];
+	BRAIN2.postSynaptic2['PVT'] = [0, 0];
+	BRAIN2.postSynaptic2['PVWL'] = [0, 0];
+	BRAIN2.postSynaptic2['PVWR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIAL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIAR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIBL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIBR'] = [0, 0];
+	BRAIN2.postSynaptic2['RICL'] = [0, 0];
+	BRAIN2.postSynaptic2['RICR'] = [0, 0];
+	BRAIN2.postSynaptic2['RID'] = [0, 0];
+	BRAIN2.postSynaptic2['RIFL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIFR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIGL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIGR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIH'] = [0, 0];
+	BRAIN2.postSynaptic2['RIML'] = [0, 0];
+	BRAIN2.postSynaptic2['RIMR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIPL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIPR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIR'] = [0, 0];
+	BRAIN2.postSynaptic2['RIS'] = [0, 0];
+	BRAIN2.postSynaptic2['RIVL'] = [0, 0];
+	BRAIN2.postSynaptic2['RIVR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDDL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDDR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDVL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMDVR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMED'] = [0, 0];
+	BRAIN2.postSynaptic2['RMEL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMER'] = [0, 0];
+	BRAIN2.postSynaptic2['RMEV'] = [0, 0];
+	BRAIN2.postSynaptic2['RMFL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMFR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMGL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMGR'] = [0, 0];
+	BRAIN2.postSynaptic2['RMHL'] = [0, 0];
+	BRAIN2.postSynaptic2['RMHR'] = [0, 0];
+	BRAIN2.postSynaptic2['SAADL'] = [0, 0];
+	BRAIN2.postSynaptic2['SAADR'] = [0, 0];
+	BRAIN2.postSynaptic2['SAAVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SAAVR'] = [0, 0];
+	BRAIN2.postSynaptic2['SABD'] = [0, 0];
+	BRAIN2.postSynaptic2['SABVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SABVR'] = [0, 0];
+	BRAIN2.postSynaptic2['SDQL'] = [0, 0];
+	BRAIN2.postSynaptic2['SDQR'] = [0, 0];
+	BRAIN2.postSynaptic2['SIADL'] = [0, 0];
+	BRAIN2.postSynaptic2['SIADR'] = [0, 0];
+	BRAIN2.postSynaptic2['SIAVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SIAVR'] = [0, 0];
+	BRAIN2.postSynaptic2['SIBDL'] = [0, 0];
+	BRAIN2.postSynaptic2['SIBDR'] = [0, 0];
+	BRAIN2.postSynaptic2['SIBVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SIBVR'] = [0, 0];
+	BRAIN2.postSynaptic2['SMBDL'] = [0, 0];
+	BRAIN2.postSynaptic2['SMBDR'] = [0, 0];
+	BRAIN2.postSynaptic2['SMBVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SMBVR'] = [0, 0];
+	BRAIN2.postSynaptic2['SMDDL'] = [0, 0];
+	BRAIN2.postSynaptic2['SMDDR'] = [0, 0];
+	BRAIN2.postSynaptic2['SMDVL'] = [0, 0];
+	BRAIN2.postSynaptic2['SMDVR'] = [0, 0];
+	BRAIN2.postSynaptic2['URADL'] = [0, 0];
+	BRAIN2.postSynaptic2['URADR'] = [0, 0];
+	BRAIN2.postSynaptic2['URAVL'] = [0, 0];
+	BRAIN2.postSynaptic2['URAVR'] = [0, 0];
+	BRAIN2.postSynaptic2['URBL'] = [0, 0];
+	BRAIN2.postSynaptic2['URBR'] = [0, 0];
+	BRAIN2.postSynaptic2['URXL'] = [0, 0];
+	BRAIN2.postSynaptic2['URXR'] = [0, 0];
+	BRAIN2.postSynaptic2['URYDL'] = [0, 0];
+	BRAIN2.postSynaptic2['URYDR'] = [0, 0];
+	BRAIN2.postSynaptic2['URYVL'] = [0, 0];
+	BRAIN2.postSynaptic2['URYVR'] = [0, 0];
+	BRAIN2.postSynaptic2['VA1'] = [0, 0];
+	BRAIN2.postSynaptic2['VA10'] = [0, 0];
+	BRAIN2.postSynaptic2['VA11'] = [0, 0];
+	BRAIN2.postSynaptic2['VA12'] = [0, 0];
+	BRAIN2.postSynaptic2['VA2'] = [0, 0];
+	BRAIN2.postSynaptic2['VA3'] = [0, 0];
+	BRAIN2.postSynaptic2['VA4'] = [0, 0];
+	BRAIN2.postSynaptic2['VA5'] = [0, 0];
+	BRAIN2.postSynaptic2['VA6'] = [0, 0];
+	BRAIN2.postSynaptic2['VA7'] = [0, 0];
+	BRAIN2.postSynaptic2['VA8'] = [0, 0];
+	BRAIN2.postSynaptic2['VA9'] = [0, 0];
+	BRAIN2.postSynaptic2['VB1'] = [0, 0];
+	BRAIN2.postSynaptic2['VB10'] = [0, 0];
+	BRAIN2.postSynaptic2['VB11'] = [0, 0];
+	BRAIN2.postSynaptic2['VB2'] = [0, 0];
+	BRAIN2.postSynaptic2['VB3'] = [0, 0];
+	BRAIN2.postSynaptic2['VB4'] = [0, 0];
+	BRAIN2.postSynaptic2['VB5'] = [0, 0];
+	BRAIN2.postSynaptic2['VB6'] = [0, 0];
+	BRAIN2.postSynaptic2['VB7'] = [0, 0];
+	BRAIN2.postSynaptic2['VB8'] = [0, 0];
+	BRAIN2.postSynaptic2['VB9'] = [0, 0];
+	BRAIN2.postSynaptic2['VC1'] = [0, 0];
+	BRAIN2.postSynaptic2['VC2'] = [0, 0];
+	BRAIN2.postSynaptic2['VC3'] = [0, 0];
+	BRAIN2.postSynaptic2['VC4'] = [0, 0];
+	BRAIN2.postSynaptic2['VC5'] = [0, 0];
+	BRAIN2.postSynaptic2['VC6'] = [0, 0];
+	BRAIN2.postSynaptic2['VD1'] = [0, 0];
+	BRAIN2.postSynaptic2['VD10'] = [0, 0];
+	BRAIN2.postSynaptic2['VD11'] = [0, 0];
+	BRAIN2.postSynaptic2['VD12'] = [0, 0];
+	BRAIN2.postSynaptic2['VD13'] = [0, 0];
+	BRAIN2.postSynaptic2['VD2'] = [0, 0];
+	BRAIN2.postSynaptic2['VD3'] = [0, 0];
+	BRAIN2.postSynaptic2['VD4'] = [0, 0];
+	BRAIN2.postSynaptic2['VD5'] = [0, 0];
+	BRAIN2.postSynaptic2['VD6'] = [0, 0];
+	BRAIN2.postSynaptic2['VD7'] = [0, 0];
+	BRAIN2.postSynaptic2['VD8'] = [0, 0];
+	BRAIN2.postSynaptic2['VD9'] = [0, 0];
 };
 
-BRAIN.update = function () {
-	if (BRAIN.stimulateHungerNeurons) {
-		BRAIN.dendriteAccumulate('RIML');
-		BRAIN.dendriteAccumulate('RIMR');
-		BRAIN.dendriteAccumulate('RICL');
-		BRAIN.dendriteAccumulate('RICR');
-		BRAIN.runconnectome();
+BRAIN2.update = function () {
+	if (BRAIN2.stimulateHungerNeurons2) {
+		BRAIN2.dendriteAccumulate('RIML');
+		BRAIN2.dendriteAccumulate('RIMR');
+		BRAIN2.dendriteAccumulate('RICL');
+		BRAIN2.dendriteAccumulate('RICR');
+		BRAIN2.runconnectome();
 	}
-	if (BRAIN.stimulateNoseTouchNeurons) {
-		BRAIN.dendriteAccumulate('FLPR');
-		BRAIN.dendriteAccumulate('FLPL');
-		BRAIN.dendriteAccumulate('ASHL');
-		BRAIN.dendriteAccumulate('ASHR');
-		BRAIN.dendriteAccumulate('IL1VL');
-		BRAIN.dendriteAccumulate('IL1VR');
-		BRAIN.dendriteAccumulate('OLQDL');
-		BRAIN.dendriteAccumulate('OLQDR');
-		BRAIN.dendriteAccumulate('OLQVR');
-		BRAIN.dendriteAccumulate('OLQVL');
-		BRAIN.runconnectome();
+	if (BRAIN2.stimulateNoseTouchNeurons2) {
+		BRAIN2.dendriteAccumulate('FLPR');
+		BRAIN2.dendriteAccumulate('FLPL');
+		BRAIN2.dendriteAccumulate('ASHL');
+		BRAIN2.dendriteAccumulate('ASHR');
+		BRAIN2.dendriteAccumulate('IL1VL');
+		BRAIN2.dendriteAccumulate('IL1VR');
+		BRAIN2.dendriteAccumulate('OLQDL');
+		BRAIN2.dendriteAccumulate('OLQDR');
+		BRAIN2.dendriteAccumulate('OLQVR');
+		BRAIN2.dendriteAccumulate('OLQVL');
+		BRAIN2.runconnectome();
 	}
-	if (BRAIN.stimulateFoodSenseNeurons) {
-		BRAIN.dendriteAccumulate('ADFL');
-		BRAIN.dendriteAccumulate('ADFR');
-		BRAIN.dendriteAccumulate('ASGR');
-		BRAIN.dendriteAccumulate('ASGL');
-		BRAIN.dendriteAccumulate('ASIL');
-		BRAIN.dendriteAccumulate('ASIR');
-		BRAIN.dendriteAccumulate('ASJR');
-		BRAIN.dendriteAccumulate('ASJL');
-		BRAIN.runconnectome();
+	if (BRAIN2.stimulateFoodSenseNeurons2) {
+		BRAIN2.dendriteAccumulate('ADFL');
+		BRAIN2.dendriteAccumulate('ADFR');
+		BRAIN2.dendriteAccumulate('ASGR');
+		BRAIN2.dendriteAccumulate('ASGL');
+		BRAIN2.dendriteAccumulate('ASIL');
+		BRAIN2.dendriteAccumulate('ASIR');
+		BRAIN2.dendriteAccumulate('ASJR');
+		BRAIN2.dendriteAccumulate('ASJL');
+		BRAIN2.runconnectome();
 	}
 
 	//RIML RIMR RICL RICR hunger neurons
@@ -726,53 +726,53 @@ BRAIN.update = function () {
 	//ASEL ASER gustatory neurons
 };
 
-BRAIN.runconnectome = function () {
-	for (var ps in BRAIN.postSynaptic) {
+BRAIN2.runconnectome = function () {
+	for (var ps2 in BRAIN2.postSynaptic2) {
 		/* Muscles cannot fire, make sure they don't */
 		if (
-			BRAIN.muscles.indexOf(ps.substring(0, 3)) == -1 &&
-			BRAIN.postSynaptic[ps][BRAIN.thisState] > BRAIN.fireThreshold
+			BRAIN2.muscles2.indexOf(ps2.substring(0, 3)) == -1 &&
+			BRAIN2.postSynaptic2[ps2][BRAIN2.thisState2] > BRAIN2.fireThreshold2
 		) {
-			BRAIN.fireNeuron(ps);
+			BRAIN2.fireNeuron(ps2);
 		}
 	}
 
-	BRAIN.motorcontrol();
+	BRAIN2.motorcontrol();
 
-	for (var ps in BRAIN.postSynaptic) {
-		BRAIN.postSynaptic[ps][BRAIN.thisState] =
-			BRAIN.postSynaptic[ps][BRAIN.nextState];
+	for (var ps2 in BRAIN2.postSynaptic2) {
+		BRAIN2.postSynaptic2[ps2][BRAIN2.thisState2] =
+			BRAIN2.postSynaptic2[ps2][BRAIN2.nextState2];
 	}
 
-	var temp = BRAIN.thisState;
-	BRAIN.thisState = BRAIN.nextState;
-	BRAIN.nextState = temp;
+	var temp2 = BRAIN2.thisState2;
+	BRAIN2.thisState2 = BRAIN2.nextState2;
+	BRAIN2.nextState2 = temp2;
 };
 
-BRAIN.fireNeuron = function (fneuron) {
+BRAIN2.fireNeuron = function (fneuron2) {
 	/* The threshold has been exceeded and we fire the neurite */
-	if (fneuron !== 'MVULVA') {
-		BRAIN.dendriteAccumulate(fneuron);
-		BRAIN.postSynaptic[fneuron][BRAIN.nextState] = 0;
+	if (fneuron2 !== 'MVULVA') {
+		BRAIN2.dendriteAccumulate(fneuron2);
+		BRAIN2.postSynaptic2[fneuron2][BRAIN2.nextState2] = 0;
 	}
 };
 
-BRAIN.motorcontrol = function () {
+BRAIN2.motorcontrol = function () {
 	/* accumulate left and right muscles and the accumulated values are
        used to move the left and right motors of the robot */
 
-	BRAIN.accumleft = 0;
-	BRAIN.accumright = 0;
+	BRAIN2.accumleft2 = 0;
+	BRAIN2.accumright2 = 0;
 
-	for (var m = 0; m < BRAIN.muscleList.length; m++) {
-		var muscleName = BRAIN.muscleList[m];
+	for (var m2 = 0; m2 < BRAIN2.muscleList2.length; m2++) {
+		var muscleName2 = BRAIN2.muscleList2[m2];
 
-		if (BRAIN.mLeft.indexOf(muscleName) != -1) {
-			BRAIN.accumleft += BRAIN.postSynaptic[muscleName][BRAIN.nextState];
-			BRAIN.postSynaptic[muscleName][BRAIN.nextState] = 0;
-		} else if (BRAIN.mRight.indexOf(muscleName) != -1) {
-			BRAIN.accumright += BRAIN.postSynaptic[muscleName][BRAIN.nextState];
-			BRAIN.postSynaptic[muscleName][BRAIN.nextState] = 0;
+		if (BRAIN2.mLeft2.indexOf(muscleName2) != -1) {
+			BRAIN2.accumleft2 += BRAIN2.postSynaptic2[muscleName2][BRAIN2.nextState2];
+			BRAIN2.postSynaptic2[muscleName2][BRAIN2.nextState2] = 0;
+		} else if (BRAIN2.mRight2.indexOf(muscleName2) != -1) {
+			BRAIN2.accumright2 += BRAIN2.postSynaptic2[muscleName2][BRAIN2.nextState2];
+			BRAIN2.postSynaptic2[muscleName2][BRAIN2.nextState2] = 0;
 		}
 	}
 };
