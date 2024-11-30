@@ -28,7 +28,7 @@ var speedChangeInterval = 0;
 var food = [];
 
 function toggleConnectome() {
-	document.getElementById('nodeHolder').style.opacity =
+	document.getElementById('nodeHolder2').style.opacity =
 		document.getElementById('connectomeCheckbox').checked ? '1' : '0';
 }
 
@@ -38,14 +38,14 @@ BRAIN.setup();
 for (var ps in BRAIN.connectome) {
 	var nameBox = document.createElement('span');
 	//nameBox.innerHTML = ps;
-	document.getElementById('nodeHolder').appendChild(nameBox);
+	document.getElementById('nodeHolder2').appendChild(nameBox);
 
 	var newBox = document.createElement('span');
 	newBox.cols = 3;
 	newBox.rows = 1;
 	newBox.id = ps;
 	newBox.className = 'brainNode';
-	document.getElementById('nodeHolder').appendChild(newBox);
+	document.getElementById('nodeHolder2').appendChild(newBox);
 }
 
 /**
